@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    volumes:
+      - ./data/npm/data:/data
+      - ./data/npm/letsencrypt:/etc/letsencrypt
+    networks:
+      - app-network
+
+  frontend:
+    image: ghcr.io/cobyl/mdd2-dataset-frontend:latest
+    container_name: mdd2-dataset-frontend
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  backend:
+    image: ghcr.io/cobyl/mdd2-dataset-backend:latest
+    container_name: mdd2-dataset-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - app-network
+      - db-network
+    depends_on:
+      - database
+
+  database:
+    image: postgres:18-alpine
+    container_name: mdd2-dataset-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-app_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-app_database}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - db-network
+
+networks:
+  app-network:
+    driver: bridge
+  db-network:
+    driver: bridge
+
+volumes:
+  pgdata:
