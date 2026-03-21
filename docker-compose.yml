@@ -67,6 +67,8 @@ services:
       - DOZZLE_USERNAME=admin
       - DOZZLE_PASSWORD=${DOZZLE_PASSWORD}
       - DOZZLE_BASE=/logs
+    networks:
+      - app-network
 
 networks:
   app-network:
