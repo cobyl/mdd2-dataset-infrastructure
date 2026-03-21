@@ -1,17 +1,15 @@
 mdd.ibb.waw.pl {
-    tls /etc/letsencrypt/live/ibb.waw.pl/fullchain.pem /etc/letsencrypt/live/ibb.waw.pl/privkey.pem
-    reverse_proxy mdd-dataset-frontend:80
-}
+	tls /etc/letsencrypt/live/ibb.waw.pl/fullchain.pem /etc/letsencrypt/live/ibb.waw.pl/privkey.pem
 
-mdd.ibb.waw.pl/api/* {
-    tls /etc/letsencrypt/live/ibb.waw.pl/fullchain.pem /etc/letsencrypt/live/ibb.waw.pl/privkey.pem
-    uri strip_prefix /api
-    reverse_proxy mdd-dataset-backend:80
-}
+	handle_path /api/* {
+		reverse_proxy mdd-dataset-backend:80
+	}
 
-mdd.ibb.waw.pl/logs/* {
-    tls /etc/letsencrypt/live/ibb.waw.pl/fullchain.pem /etc/letsencrypt/live/ibb.waw.pl/privkey.pem
-    uri strip_prefix /logs
-    reverse_proxy dozzle:8080
-}
+	handle_path /logs/* {
+		reverse_proxy dozzle:8080
+	}
 
+	handle {
+		reverse_proxy mdd-dataset-frontend:80
+	}
+}
