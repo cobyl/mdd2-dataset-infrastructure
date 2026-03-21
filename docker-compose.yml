@@ -45,6 +45,18 @@ services:
     networks:
       - db-network
 
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - REPO_USER=${GHCR_USERNAME}
+      - REPO_PASS=${GHCR_PAT}
+      - WATCHTOWER_POLL_INTERVAL=60
+      - WATCHTOWER_CLEANUP=true
+
 networks:
   app-network:
     driver: bridge
