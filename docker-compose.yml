@@ -66,6 +66,7 @@ services:
     environment:
       - DOZZLE_USERNAME=admin
       - DOZZLE_PASSWORD=${DOZZLE_PASSWORD}
+      - DOZZLE_BASE=/logs
 
 networks:
   app-network:
