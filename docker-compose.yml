@@ -1,18 +1,4 @@
 services:
-  nginx-proxy-manager:
-    image: 'jc21/nginx-proxy-manager:latest'
-    container_name: nginx-proxy-manager
-    restart: unless-stopped
-    ports:
-      - '80:80'
-      - '443:443'
-      - '81:81'
-    volumes:
-      - ./data/npm/data:/data
-      - ./data/npm/letsencrypt:/etc/letsencrypt
-    networks:
-      - app-network
-
   frontend:
     image: ghcr.io/cobyl/mdd2-dataset-frontend:latest
     container_name: mdd2-dataset-frontend
@@ -44,6 +30,20 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - db-network
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./data/caddy_data:/data
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    networks:
+      - app-network
 
   watchtower:
     image: nickfedor/watchtower
