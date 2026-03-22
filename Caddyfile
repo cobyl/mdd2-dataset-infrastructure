@@ -5,9 +5,7 @@ mdd.ibb.waw.pl {
 		reverse_proxy mdd2-dataset-backend:80
 	}
 
-	redir /logs /logs/
-
-    handle /logs/* {
+    handle /logs* {
         basicauth {
             admin {$DOZZLE_PASSWORD_HASH}
         }
