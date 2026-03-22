@@ -38,6 +38,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      - DOZZLE_PASSWORD_HASH=${DOZZLE_PASSWORD_HASH}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - ./data/caddy_data:/data
@@ -64,8 +66,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - DOZZLE_USERNAME=admin
-      - DOZZLE_PASSWORD=${DOZZLE_PASSWORD}
       - DOZZLE_BASE=/logs/
     networks:
       - app-network
