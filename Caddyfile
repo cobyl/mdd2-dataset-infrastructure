@@ -1,7 +1,7 @@
 mdd.ibb.waw.pl {
 	tls /etc/letsencrypt/live/ibb.waw.pl/fullchain.pem /etc/letsencrypt/live/ibb.waw.pl/privkey.pem
 
-	handle_path /api* {
+	handle /api* {
 		reverse_proxy mdd2-dataset-backend:80
 	}
 
